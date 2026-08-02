@@ -24,6 +24,7 @@ spec:
       prune: true
     syncOptions:
       - SkipDryRunOnMissingResource=true
+      - CreateNamespace=true
     retry:
       limit: 10
       backoff:

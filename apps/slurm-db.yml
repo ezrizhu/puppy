@@ -16,6 +16,7 @@ spec:
     automated:
       prune: true
     syncOptions:
+      - CreateNamespace=true
       - SkipDryRunOnMissingResource=true
     retry:
       limit: 10
