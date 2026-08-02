@@ -1,0 +1,17 @@
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: pound
+  namespace: metallb-system
+spec:
+  addresses:
+    - 192.168.1.100/32
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: puppy-l2
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+    - pound
