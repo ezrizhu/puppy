@@ -1,0 +1,92 @@
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: longhorn
+  namespace: longhorn-system
+spec:
+  virtualhost:
+    fqdn: longhorn.192.168.1.100.nip.io
+  routes:
+    - services:
+        - name: longhorn-frontend
+          port: 80
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  virtualhost:
+    fqdn: grafana.192.168.1.100.nip.io
+  routes:
+    - services:
+        - name: victoria-metrics-k8s-stack-grafana
+          port: 80
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: victoriametrics
+  namespace: monitoring
+spec:
+  virtualhost:
+    fqdn: vm.192.168.1.100.nip.io
+  routes:
+    - services:
+        - name: vmsingle-victoria-metrics-k8s-stack
+          port: 8428
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: victorialogs
+  namespace: monitoring
+spec:
+  virtualhost:
+    fqdn: vl.192.168.1.100.nip.io
+  routes:
+    - services:
+        - name: vlsingle-victoria-metrics-k8s-stack
+          port: 9428
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: alertmanager
+  namespace: monitoring
+spec:
+  virtualhost:
+    fqdn: alertmanager.192.168.1.100.nip.io
+  routes:
+    - services:
+        - name: vmalertmanager-victoria-metrics-k8s-stack
+          port: 9093
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: argocd
+  namespace: argocd
+spec:
+  virtualhost:
+    fqdn: argocd.192.168.1.100.nip.io
+    tls:
+      passthrough: true
+  tcpproxy:
+    services:
+      - name: argocd-server
+        port: 443
+---
+apiVersion: projectcontour.io/v1
+kind: HTTPProxy
+metadata:
+  name: keycloak
+  namespace: keycloak
+spec:
+  virtualhost:
+    fqdn: keycloak.192.168.1.100.nip.io
+  routes:
+    - services:
+        - name: keycloak-service
+          port: 8080
