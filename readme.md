@@ -19,7 +19,9 @@ https://docs.siderolabs.com/talos/v1.13/getting-started/getting-started#
 1. kubectl create namespace argocd
 2. kubectl apply -n argocd --server-side --force-conflicts -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 3. kubectl config set-context --current --namespace=argocd
-4. kubectl port-forward svc/argocd-server -n argocd 8080:443
-5. argocd admin initial-password -n argocd
+4. argocd admin initial-password -n argocd
 
 
+## todos
+- [ ] get vm n vl to properly get logs n metrics from everything else
+- [ ] 
