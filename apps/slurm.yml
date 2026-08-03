@@ -16,6 +16,8 @@ spec:
         nodesets:
           slinky:
             replicas: 0
+        slurm-exporter
+          enabled: true
   destination:
     server: https://kubernetes.default.svc
     namespace: slurm
