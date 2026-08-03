@@ -5,7 +5,7 @@ metadata:
   namespace: longhorn-system
 spec:
   virtualhost:
-    fqdn: longhorn.192.168.1.100.nip.io
+    fqdn: longhorn.192.168.2.100.nip.io
   routes:
     - services:
         - name: longhorn-frontend
@@ -18,7 +18,7 @@ metadata:
   namespace: monitoring
 spec:
   virtualhost:
-    fqdn: grafana.192.168.1.100.nip.io
+    fqdn: grafana.192.168.2.100.nip.io
   routes:
     - services:
         - name: victoria-metrics-k8s-stack-grafana
@@ -31,7 +31,7 @@ metadata:
   namespace: monitoring
 spec:
   virtualhost:
-    fqdn: vm.192.168.1.100.nip.io
+    fqdn: vm.192.168.2.100.nip.io
   routes:
     - services:
         - name: vmsingle-victoria-metrics-k8s-stack
@@ -44,7 +44,7 @@ metadata:
   namespace: monitoring
 spec:
   virtualhost:
-    fqdn: vl.192.168.1.100.nip.io
+    fqdn: vl.192.168.2.100.nip.io
   routes:
     - services:
         - name: vlsingle-victoria-metrics-k8s-stack
@@ -57,7 +57,7 @@ metadata:
   namespace: monitoring
 spec:
   virtualhost:
-    fqdn: alertmanager.192.168.1.100.nip.io
+    fqdn: alertmanager.192.168.2.100.nip.io
   routes:
     - services:
         - name: vmalertmanager-victoria-metrics-k8s-stack
@@ -70,7 +70,7 @@ metadata:
   namespace: argocd
 spec:
   virtualhost:
-    fqdn: argocd.192.168.1.100.nip.io
+    fqdn: argocd.192.168.2.100.nip.io
     tls:
       passthrough: true
   tcpproxy:
@@ -85,7 +85,7 @@ metadata:
   namespace: keycloak
 spec:
   virtualhost:
-    fqdn: keycloak.192.168.1.100.nip.io
+    fqdn: keycloak.192.168.2.100.nip.io
   routes:
     - services:
         - name: keycloak-service
