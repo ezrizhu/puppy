@@ -10,6 +10,7 @@ pkgs.mkShell {
     talosctl
     argocd
     k9s
+    kubectx
   ];
   shellHook = ''
     export GIT_CONFIG_COUNT=2
