@@ -16,7 +16,8 @@ spec:
         ipam:
           mode: kubernetes
         kubeProxyReplacement: true
-        ingressController.enabled: true
+        ingressController:
+          enabled: true
         operator:
           replicas: 1
         securityContext:
