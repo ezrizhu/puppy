@@ -1,92 +1,134 @@
-apiVersion: projectcontour.io/v1
-kind: HTTPProxy
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
   name: longhorn
   namespace: longhorn-system
 spec:
-  virtualhost:
-    fqdn: longhorn.192.168.2.100.nip.io
-  routes:
-    - services:
-        - name: longhorn-frontend
-          port: 80
+  ingressClassName: cilium
+  rules:
+    - host: longhorn.192.168.2.100.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: longhorn-frontend
+                port:
+                  number: 80
 ---
-apiVersion: projectcontour.io/v1
-kind: HTTPProxy
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
   name: grafana
   namespace: monitoring
 spec:
-  virtualhost:
-    fqdn: grafana.192.168.2.100.nip.io
-  routes:
-    - services:
-        - name: victoria-metrics-k8s-stack-grafana
-          port: 80
+  ingressClassName: cilium
+  rules:
+    - host: grafana.192.168.2.100.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: victoria-metrics-k8s-stack-grafana
+                port:
+                  number: 80
 ---
-apiVersion: projectcontour.io/v1
-kind: HTTPProxy
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
   name: victoriametrics
   namespace: monitoring
 spec:
-  virtualhost:
-    fqdn: vm.192.168.2.100.nip.io
-  routes:
-    - services:
-        - name: vmsingle-victoria-metrics-k8s-stack
-          port: 8428
+  ingressClassName: cilium
+  rules:
+    - host: vm.192.168.2.100.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vmsingle-victoria-metrics-k8s-stack
+                port:
+                  number: 8428
 ---
-apiVersion: projectcontour.io/v1
-kind: HTTPProxy
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
   name: victorialogs
   namespace: monitoring
 spec:
-  virtualhost:
-    fqdn: vl.192.168.2.100.nip.io
-  routes:
-    - services:
-        - name: vlsingle-victoria-metrics-k8s-stack
-          port: 9428
+  ingressClassName: cilium
+  rules:
+    - host: vl.192.168.2.100.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vlsingle-victoria-metrics-k8s-stack
+                port:
+                  number: 9428
 ---
-apiVersion: projectcontour.io/v1
-kind: HTTPProxy
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
   name: alertmanager
   namespace: monitoring
 spec:
-  virtualhost:
-    fqdn: alertmanager.192.168.2.100.nip.io
-  routes:
-    - services:
-        - name: vmalertmanager-victoria-metrics-k8s-stack
-          port: 9093
+  ingressClassName: cilium
+  rules:
+    - host: alertmanager.192.168.2.100.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vmalertmanager-victoria-metrics-k8s-stack
+                port:
+                  number: 9093
 ---
-apiVersion: projectcontour.io/v1
-kind: HTTPProxy
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
   name: argocd
   namespace: argocd
+  annotations:
+    ingress.cilium.io/tls-passthrough: "enabled"
 spec:
-  virtualhost:
-    fqdn: argocd.192.168.2.100.nip.io
-    tls:
-      passthrough: true
-  tcpproxy:
-    services:
-      - name: argocd-server
-        port: 443
+  ingressClassName: cilium
+  rules:
+    - host: argocd.192.168.2.100.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: argocd-server
+                port:
+                  number: 443
 ---
-apiVersion: projectcontour.io/v1
-kind: HTTPProxy
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
   name: keycloak
   namespace: keycloak
 spec:
-  virtualhost:
-    fqdn: keycloak.192.168.2.100.nip.io
-  routes:
-    - services:
-        - name: keycloak-service
-          port: 8080
+  ingressClassName: cilium
+  rules:
+    - host: keycloak.192.168.2.100.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: keycloak-service
+                port:
+                  number: 8080
