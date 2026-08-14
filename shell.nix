@@ -11,6 +11,7 @@ pkgs.mkShell {
     argocd
     k9s
     kubectx
+    kubernetes-helm
   ];
   shellHook = ''
     export GIT_CONFIG_COUNT=2
