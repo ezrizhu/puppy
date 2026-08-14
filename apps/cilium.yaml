@@ -18,6 +18,7 @@ spec:
         kubeProxyReplacement: true
         ingressController:
           enabled: true
+          loadbalancerMode: shared
         operator:
           replicas: 1
         l2announcements:
