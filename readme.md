@@ -25,13 +25,37 @@ or reset via
 - `talosctl bootstrap --nodes 192.168.2.240 --talosconfig=./talosconfig`
 - `talosctl kubeconfig --nodes 192.168.2.240 --talosconfig=./talosconfig`
 
+```
+helm repo add cilium https://helm.cilium.io/
+helm repo update
+
+helm template \
+    cilium \
+    cilium/cilium \
+    --version 1.18.0 \
+    --namespace kube-system \
+    --set ipam.mode=kubernetes \
+    --set kubeProxyReplacement=true \
+    --set securityContext.capabilities.ciliumAgent="{CHOWN,KILL,NET_ADMIN,NET_RAW,IPC_LOCK,SYS_ADMIN,SYS_RESOURCE,DAC_OVERRIDE,FOWNER,SETGID,SETUID}" \
+    --set securityContext.capabilities.cleanCiliumState="{NET_ADMIN,SYS_ADMIN,SYS_RESOURCE}" \
+    --set cgroup.autoMount.enabled=false \
+    --set cgroup.hostRoot=/sys/fs/cgroup \
+    --set k8sServiceHost=localhost \
+    --set k8sServicePort=7445 > cilium.yaml
+
+kubectl apply -f cilium.yaml
+```
+
 ### Init (ArgoCD)
 
-1. kubectl create namespace argocd
-2. kubectl apply -n argocd --server-side --force-conflicts -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-3. kubectl config set-context --current --namespace=argocd
-4. argocd admin initial-password -n argocd
-5. kubectl port-forward svc/argocd-server -n argocd 8080:443
+```
+kubectl create namespace argocd
+kubectl apply -n argocd --server-side --force-conflicts -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl config set-context --current --namespace=argocd
+kubectl apply -n argocd -f apps.yaml
+```
+- `argocd admin initial-password -n argocd`
+- `kubectl port-forward svc/argocd-server -n argocd 8080:443`
 
 
 ## todos
