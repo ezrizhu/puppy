@@ -30,9 +30,11 @@ RUN chmod u+w / # https://github.com/openhpc/ohpc/issues/2061
 RUN userdel systemd-coredump # remove unused dynamic system user
 COPY excludes /etc/warewulf/
 COPY image_exit.sh /etc/warewulf/
-RUN ln -sf image_exit.sh /etc/warewulf/container_exit.sh && /etc/warewulf/image_exit.sh
+RUN ln -sf image_exit.sh /etc/warewulf/container_exit.sh
+RUN chmod +x /etc/warewulf/image_exit.sh
 RUN dnf -y install \
       policycoreutils-python-utils \
       selinux-policy-targeted
 RUN semanage fcontext -N -a -t bin_t /warewulf/wwclient || true
 RUN update-crypto-policies --set FIPS
+RUN /etc/warewulf/image_exit.sh
