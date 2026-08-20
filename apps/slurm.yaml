@@ -13,6 +13,16 @@ spec:
       values: |
         accounting:
           enabled: true
+        controller:
+          service:
+            spec:
+              type: NodePort
+            nodePort: 30817
+            port: 6817
+          # TODO: add MaxNodeCount for dynamic node registration (-Z flag)
+          # once warewulf is deployed and bare metal nodes are PXE-booting.
+          # extraConfMap:
+          #   MaxNodeCount: 1024
         nodesets:
           slinky:
             replicas: 0

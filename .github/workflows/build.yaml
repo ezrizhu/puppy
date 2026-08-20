@@ -6,7 +6,7 @@ on:
     branches: [ "main" ]
     paths:
       - "images/**"
-      - ".github/workflows/build.yml"
+      - ".github/workflows/build.yaml"
 
 jobs:
   build:
