@@ -76,14 +76,10 @@ spec:
         
           wwctl overlay build
         
-          # -a: all services
-          # -d: debug logs
-          # -v: verbose
           # || true: wwctl configure will fail due to lack of pid1
-          wwctl configure -adv || true
+          wwctl configure dhcp || true
+          wwctl configure tftp || true
 
-          sed -i 's/interface=lo0/interface=eth0/g' /etc/dnsmasq.conf
-        
           echo "starting services"
           dnsmasq --no-daemon --keep-in-foreground --log-facility=- &
           wwctl server
