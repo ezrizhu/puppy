@@ -21,7 +21,6 @@ spec:
           network: 192.168.2.0
           warewulf:
             port: 9873
-            secure: true
             grubboot: true
             update interval: 60
           dhcp:
