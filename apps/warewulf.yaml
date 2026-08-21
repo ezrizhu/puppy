@@ -70,7 +70,7 @@ spec:
         
           wwctl profile set -y default --netdev eth0 --netmask 255.255.255.0 --kernelargs "crashkernel=no net.ifnames=1"
         
-          wwctl node add "cpu0.local" --hwaddr "E8:6A:64:04:90:A2" --ipaddr "192.168.2.20" --netdev eth0 --image "base"
+          wwctl node add "cpu0.local" --hwaddr "e8:6a:64:04:90:a2" --ipaddr "192.168.2.20" --netdev eth0 --image "base"
         
           bash /bootstrap/slurm-overlay.sh
         
@@ -81,7 +81,7 @@ spec:
           wwctl configure tftp || true
 
           echo "starting services"
-          dnsmasq --no-daemon --keep-in-foreground --log-facility=- &
+          dnsmasq --port=0 --no-daemon --keep-in-foreground --log-facility=- &
           wwctl server
         
   destination:
