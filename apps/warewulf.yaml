@@ -27,10 +27,8 @@ spec:
             enabled: true
             range start: 192.168.2.100
             range end: 192.168.2.199
-            systemd name: dnsmasq
           tftp:
             enabled: true
-            systemd name: dnsmasq
           nfs:
             enabled: false
         
