@@ -80,7 +80,7 @@ spec:
             --runtime-overlays "UNSET" \
             --root tmpfs
         
-          wwctl node add "cpu0.local" --hwaddr "e8:6a:64:04:90:a2" --ipaddr "192.168.2.20" --netdev eth0 --image "base" --profile "puppy"
+          wwctl node add "cpu0.local" --hwaddr "e8:6a:64:04:90:a2" --ipaddr "192.168.2.20" --netdev "enp0s31f6" --image "base" --profile "puppy"
         
           # || true: wwctl configure will fail due to lack of pid1
           wwctl configure dhcp || true
