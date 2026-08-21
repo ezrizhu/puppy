@@ -1,5 +1,5 @@
 image: ghcr.io/ezrizhu/puppy/warewulf:latest
-imagePullPolicy: IfNotPresent
+imagePullPolicy: Always
 hostNetwork: true
 
 # k8s secrets ie slurm key
