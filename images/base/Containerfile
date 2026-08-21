@@ -36,11 +36,8 @@ RUN dnf -y install \
 # grub boot
 RUN dnf install -y grub2-efi shim
 
-# debugging
 RUN dnf -y install openssh-server
-RUN mkdir -p /root/.ssh
-RUN echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM5LwqeXxRdxUxokCPDl13YDeiS7YBMPBcPNWmwXSAQz biscuit-wsl-nix" > /root/.ssh/authorized_keys
-RUN chmod 600 /root/.ssh/authorized_keys
+RUN systemctl --enable sshd
 
 RUN semanage fcontext -N -a -t bin_t /warewulf/wwclient || true
 RUN update-crypto-policies --set FIPS
