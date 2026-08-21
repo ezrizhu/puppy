@@ -74,7 +74,7 @@ spec:
           wwctl profile add puppy \
             --netdev eth0 \
             --netmask 255.255.255.0 \
-            --kernelargs "crashkernel=no net.ifnames=1 fips=1" \
+            --kernelargs "crashkernel=no net.ifnames=1" \
             --init "/sbin/init" \
             --system-overlays "wwinit,slurm" \
             --runtime-overlays "UNSET" \
