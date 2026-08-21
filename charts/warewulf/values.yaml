@@ -1,0 +1,17 @@
+image: ghcr.io/ezrizhu/puppy/warewulf:latest
+imagePullPolicy: IfNotPresent
+hostNetwork: true
+
+# k8s secrets ie slurm key
+secrets: []
+
+# warewulf.conf
+warewulfConf: ""
+
+# Slurm overlay setup script
+slurmOverlay: ""
+
+# CT startup
+bootstrapScript: ""
+
+resources: {}

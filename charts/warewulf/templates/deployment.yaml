@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "warewulf.fullname" . }}
+  labels:
+    {{- include "warewulf.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: warewulf
+  template:
+    metadata:
+      labels:
+        app: warewulf
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      hostname: warewulf
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: warewulf
+          image: {{ .Values.image }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          ports:
+            - { containerPort: 9873, name: warewulf, protocol: TCP }
+            - { containerPort: 67,   name: dhcp,     protocol: UDP }
+            - { containerPort: 69,   name: pxe,      protocol: UDP }
+          securityContext:
+            privileged: true
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/bash", "/bootstrap/bootstrap.sh"]
+          {{- with .Values.resources }}
+          resources: {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - { name: bootstrap, mountPath: /bootstrap }
+            {{- range .Values.secrets }}
+            - name: secret-{{ .secretName }}
+              mountPath: /secrets/{{ .secretName }}
+              readOnly: true
+            {{- end }}
+      volumes:
+        - name: state
+          emptyDir: {}
+        - name: bootstrap
+          configMap:
+            name: {{ warewulf.Name }}-bootstrap
+            defaultMode: 0755
+        {{- range .Values.secrets }}
+        - name: secret-{{ .secretName }}
+          secret:
+            secretName: {{ .secretName }}
+            optional: true
+        {{- end }}

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ warewulf.Name }}-bootstrap
+  namespace: {{ warewulf.Namespace }}
+data:
+  {{- if .Values.bootstrapScript }}
+  bootstrap.sh: |
+{{ .Values.bootstrapScript | indent 4 }}
+  {{- end }}
+  {{- if .Values.warewulfConf }}
+  warewulf.conf: |
+{{ .Values.warewulfConf | indent 4 }}
+  {{- end }}
+  {{- if .Values.slurmOverlay }}
+  slurm-overlay.sh: |
+{{ .Values.slurmOverlay | indent 4 }}

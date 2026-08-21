@@ -1,0 +1,96 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: warewulf
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/ezrizhu/puppy
+    targetRevision: main
+    path: charts/warewulf
+    helm:
+      values: |
+        secrets:
+          - secretName: slurm-auth-slurm
+        
+        warewulfConf: |
+          WW_INTERNAL: 45
+          ipaddr: 192.168.2.240
+          netmask: 255.255.255.0
+          network: 192.168.2.0
+          warewulf:
+            port: 9873
+            secure: false
+            update interval: 60
+          dhcp:
+            enabled: true
+            range start: 192.168.2.100
+            range end: 192.168.2.199
+            systemd name: dnsmasq
+          tftp:
+            enabled: true
+            systemd name: dnsmasq
+          nfs:
+            enabled: false
+        
+        slurmOverlay: |
+          #!/bin/bash
+          set -x
+        
+          OV=/var/lib/warewulf/overlays/slurm/rootfs
+          mkdir -p $OV/etc/sysconfig $OV/etc/slurm
+        
+          # TODO: have a better story for this, prly same as lustre key distrib story
+          if [ ! -f /secrets/slurm-auth-slurm/slurm.key ]
+          then
+            echo no slurm key found
+            exit 1
+          fi
+        
+          cat > $OV/etc/sysconfig/slurmd <<'EOF'
+          SLURMD_OPTIONS="-Z --conf-server 192.168.2.240:30817"
+          EOF
+        
+          cp /secrets/slurm-auth-slurm/slurm.key $OV/etc/slurm/slurm.key
+          chmod 0600 $OV/etc/slurm/slurm.key
+          chown 202:202 $OV/etc/slurm/slurm.key
+        
+          wwctl profile set --yes default --system-overlays "wwinit,slurm"
+        
+        bootstrapScript: |
+          #!/bin/bash
+          set -x
+        
+          cp /bootstrap/warewulf.conf /etc/warewulf/warewulf.conf
+          wwctl version
+        
+          wwctl container import docker://ghcr.io/ezrizhu/puppy/base:latest base
+          wwctl container build base
+        
+          wwctl profile set -y default --netdev eth0 --netmask 255.255.255.0 --kernelargs "crashkernel=no net.ifnames=1"
+        
+          wwctl node add "cpu0.local" --hwaddr "9F:E6:EA:74:FB:46" --ipaddr "192.168.2.20" --netdev eth0 --image "base"
+        
+          bash /bootstrap/slurm-overlay.sh
+        
+          wwctl overlay build
+        
+          # -a: all services
+          # -d: debug logs
+          # -v: verbose
+          # || true: wwctl configure will fail due to lack of pid1
+          wwctl configure -adv || true
+        
+          echo "starting services"
+          dnsmasq --no-daemon --keep-in-foreground --log-facility=- &
+          wwctl server
+        
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: warewulf
+  syncPolicy:
+    automated:
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
