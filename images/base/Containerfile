@@ -28,13 +28,26 @@ RUN dnf install -y --allowerasing \
     && dnf clean all
 RUN chmod u+w / # https://github.com/openhpc/ohpc/issues/2061
 RUN userdel systemd-coredump # remove unused dynamic system user
+
+RUN dnf -y install \
+      policycoreutils-python-utils \
+      selinux-policy-targeted
+
+# grub boot
+RUN dnf install -y grub2-efi shim
+
+# debugging
+RUN dnf -y install openssh-server
+RUN mkdir /root/.ssh
+RUN echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM5LwqeXxRdxUxokCPDl13YDeiS7YBMPBcPNWmwXSAQz biscuit-wsl-nix" > /root/.ssh/authorized_keys
+RUN chmod 600 /root/.ssh/authorized_keys
+
+RUN semanage fcontext -N -a -t bin_t /warewulf/wwclient || true
+RUN update-crypto-policies --set FIPS
+
+# cleanup
 COPY excludes /etc/warewulf/
 COPY image_exit.sh /etc/warewulf/
 RUN ln -sf image_exit.sh /etc/warewulf/container_exit.sh
 RUN chmod +x /etc/warewulf/image_exit.sh
-RUN dnf -y install \
-      policycoreutils-python-utils \
-      selinux-policy-targeted
-RUN semanage fcontext -N -a -t bin_t /warewulf/wwclient || true
-RUN update-crypto-policies --set FIPS
 RUN /etc/warewulf/image_exit.sh
