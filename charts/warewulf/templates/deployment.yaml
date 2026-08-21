@@ -30,10 +30,7 @@ spec:
             - { containerPort: 69,   name: pxe,      protocol: UDP }
           securityContext:
             privileged: true
-          lifecycle:
-            postStart:
-              exec:
-                command: ["/bin/bash", "/bootstrap/bootstrap.sh"]
+          command: ["/bin/bash", "-c", "/bootstrap/bootstrap.sh"]
           {{- with .Values.resources }}
           resources: {{- toYaml . | nindent 12 }}
           {{- end }}
