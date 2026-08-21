@@ -82,7 +82,7 @@ spec:
           # || true: wwctl configure will fail due to lack of pid1
           wwctl configure -adv || true
 
-          echo "interface=eth0" | tee -a /etc/dnsmasq.conf
+          sed -i 's/interface=lo0/interface=eth0/g' /etc/dnsmasq.conf
         
           echo "starting services"
           dnsmasq --no-daemon --keep-in-foreground --log-facility=- &
