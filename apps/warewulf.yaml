@@ -29,8 +29,10 @@ spec:
             range end: 192.168.2.199
           tftp:
             enabled: true
+            systemd name: dnsmasq
           nfs:
             enabled: false
+            systemd name: dnsmasq
         
         slurmOverlay: |
           #!/bin/bash
@@ -68,7 +70,7 @@ spec:
         
           wwctl profile set -y default --netdev eth0 --netmask 255.255.255.0 --kernelargs "crashkernel=no net.ifnames=1"
         
-          wwctl node add "cpu0.local" --hwaddr "9F:E6:EA:74:FB:46" --ipaddr "192.168.2.20" --netdev eth0 --image "base"
+          wwctl node add "cpu0.local" --hwaddr "E8:6A:64:04:90:A2" --ipaddr "192.168.2.20" --netdev eth0 --image "base"
         
           bash /bootstrap/slurm-overlay.sh
         
