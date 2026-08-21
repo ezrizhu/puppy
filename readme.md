@@ -60,6 +60,11 @@ kubectl apply -n argocd -f apps.yaml
 - `argocd admin initial-password -n argocd`
 - `kubectl port-forward svc/argocd-server -n argocd 8080:443`
 
+```
+kubectl get secret slurm-auth-slurm -n slurm -o json \
+  | jq '.metadata = {name: "slurm-auth-slurm", namespace: "warewulf"}' \
+  | kubectl apply -f -
+```
 
 ## todos
 - [ ] get vm n vl to properly get logs n metrics from everything else
