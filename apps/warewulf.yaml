@@ -56,14 +56,6 @@ spec:
           cp /secrets/slurm-auth-slurm/slurm.key $OV/etc/slurm/slurm.key
           chmod 0600 $OV/etc/slurm/slurm.key
           chown 202:202 $OV/etc/slurm/slurm.key
-
-          # debugging
-          mkdir -p $OV/root/.ssh
-          echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM5LwqeXxRdxUxokCPDl13YDeiS7YBMPBcPNWmwXSAQz biscuit-wsl-nix" > $OV/root/.ssh/authorized_keys
-          chmod 600 $OV/root/.ssh/authorized_keys
-          ln -s $OV/usr/lib/systemd/system/sshd.service $OV/etc/systemd/system/sshd.service
-        
-          wwctl profile set --yes default --system-overlays "wwinit,slurm"
         
         bootstrapScript: |
           #!/bin/bash
@@ -81,7 +73,8 @@ spec:
           wwctl node add "cpu0.local" --hwaddr "e8:6a:64:04:90:a2" --ipaddr "192.168.2.20" --netdev eth0 --image "base"
         
           bash /bootstrap/slurm-overlay.sh
-        
+
+          wwctl profile set --yes default --system-overlays "wwinit,slurm"
           wwctl overlay build
         
           # || true: wwctl configure will fail due to lack of pid1

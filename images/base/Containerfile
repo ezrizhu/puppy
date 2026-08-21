@@ -38,6 +38,9 @@ RUN dnf install -y grub2-efi shim
 
 RUN dnf -y install openssh-server
 RUN systemctl --enable sshd
+RUN mkdir -p /root/.ssh
+RUN echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCiXbeSKtmCeiVGOxyPETQYGcmbPvMO3jKs45Qfrz5zLlfirxp3NsiLss0S6A2m7/i7SyqkOTGLzEI1AY+Hi8/suK2m8SuslRdOdJ+crjOKSGwOUzFJ7XGDz1yJn0bj7g2a+g/Hpp7v38qYOVr5lxu6L67BYxDkgHahE0bgWUXyagVna7pBw2OX0EKUYzGL6bxp2ORE4RAXLNK89qq7jqvZeZUw6/eyYGTgN+POsKfO+VZhfCkK8QYj1IviR/F87o6GqcV0uz8Hzi/J6Ljdlodb58fDofL9C4uCS1ThiDsZXVJZSN1lNGQ+xcfkw1T48ItvnU8pQP6lWgM5Wl2B8jZyawB74ed+ROtGqAf4N4/M+PCV9QLsy+ydMpqkc+zWNjKKAu8jEyUkykmAG/QdEgY2b/ZFpy9pogEmmrpylhGAie6x4u/sTjwChi2ulZLND0ft9snbPnHrwoJuLvTxKcrXYQTgznZ79Nt1AxaDbgrypqF0GHh/wJzw6I2Wlpfu3sE= biscuit-mbp" > /root/.ssh/authorized_keys
+RUN chmod 600 /root/.ssh/authorized_keys
 
 RUN semanage fcontext -N -a -t bin_t /warewulf/wwclient || true
 RUN update-crypto-policies --set FIPS
