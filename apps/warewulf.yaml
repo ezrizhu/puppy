@@ -74,7 +74,8 @@ spec:
           wwctl container import docker://ghcr.io/ezrizhu/puppy/base:latest base
           wwctl container build base
         
-          wwctl profile set -y default --netdev eth0 --netmask 255.255.255.0 --kernelargs "crashkernel=no net.ifnames=1"
+          # TODO: fips
+          wwctl profile set -y default --netdev eth0 --netmask 255.255.255.0 --kernelargs "crashkernel=no net.ifnames=1" --root tmpfs
         
           wwctl node add "cpu0.local" --hwaddr "e8:6a:64:04:90:a2" --ipaddr "192.168.2.20" --netdev eth0 --image "base"
         
