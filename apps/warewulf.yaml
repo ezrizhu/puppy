@@ -23,6 +23,7 @@ spec:
             port: 9873
             grubboot: true
             update interval: 60
+            secure: false
           dhcp:
             enabled: true
             range start: 192.168.2.100
