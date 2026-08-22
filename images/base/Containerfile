@@ -33,8 +33,9 @@ RUN dnf -y install \
       policycoreutils-python-utils \
       selinux-policy-targeted
 
-# grub boot
-RUN dnf install -y grub2-efi shim
+# boot
+RUN dnf install -y grub2-efi shim 
+RUN dnf install -y ignition gdisk cryptsetup
 
 RUN dnf -y install openssh-server
 RUN systemctl enable sshd
